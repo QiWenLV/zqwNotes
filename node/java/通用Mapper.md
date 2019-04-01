@@ -10,6 +10,20 @@
 </dependency>
 ```
 
+## 扩展通用接口
+
+```java
+@RegisterMapper
+public interface SelectAllMapper<T> {
+    /**
+     * 查询全部结果
+     * @return
+     */
+    @SelectProvider(type = MySelectProvider.class, method = "dynamicSQL")
+    List<T> selectAll();
+}
+```
+
 
 
 ## mybatis连表查询
