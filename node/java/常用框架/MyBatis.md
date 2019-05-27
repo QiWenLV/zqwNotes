@@ -1,27 +1,18 @@
-## 与Spring Boot 集成
 
-依赖
+
+
+
+### foreach写法
 
 ```xml
-<dependency>
-    <groupId>tk.mybatis</groupId>
-    <artifactId>mapper-spring-boot-starter</artifactId>
-    <version>2.1.5</version>
-</dependency>
-```
-
-## 扩展通用接口
-
-```java
-@RegisterMapper
-public interface SelectAllMapper<T> {
-    /**
-     * 查询全部结果
-     * @return
-     */
-    @SelectProvider(type = MySelectProvider.class, method = "dynamicSQL")
-    List<T> selectAll();
-}
+<select id="selectRoleByUid" resultMap="BaseResultMap">
+    select sr.* from sys_role sr
+    left join sys_user_role sur on sur.role_id = sr.role_id
+    where uid = #{uid} and sur.perms in
+    <foreach collection="perms" index="index" item="perm" open="(" separator="," close=")">
+        #{perm}
+    </foreach>
+</select>
 ```
 
 
@@ -74,4 +65,38 @@ public interface SelectAllMapper<T> {
     SELECT s_id id, s_name name FROM student WHERE class_id=#{id}
 </select>
 ```
+
+
+
+
+## 通用Mapper
+
+### 与Spring Boot 集成
+
+依赖
+
+```xml
+<dependency>
+    <groupId>tk.mybatis</groupId>
+    <artifactId>mapper-spring-boot-starter</artifactId>
+    <version>2.1.5</version>
+</dependency>
+```
+
+
+## 扩展通用接口
+
+```java
+@RegisterMapper
+public interface SelectAllMapper<T> {
+    /**
+     * 查询全部结果
+     * @return
+     */
+    @SelectProvider(type = MySelectProvider.class, method = "dynamicSQL")
+    List<T> selectAll();
+}
+```
+
+
 

@@ -43,7 +43,7 @@ Stream<Double> stream4 = Stream.generate(Math::random).limit(2);
 
 
 
-## 操作
+## 中间操作
 
 
 
@@ -62,3 +62,102 @@ list.stream()
 - `skip(long n)` —— 去除前 n 个元素。若流中元素不足n个，则返回一个空流。与limit(n)互补。
 - `distinct()` —— 去重，通过流中素的hashCode()和equals()去除重复元素
 - `sorted()/sorted((T, T) -> int)`—— 排序，如果元素实现了Comparable 接口就不需要传参，如果没有这需要传入比较函数，返回结果小于零说明前一个值小，大于零说明前一个值大。
+- `peek()`——  外部操作
+- `map()` —— 将流中一种元素转换为另一种类型的元素
+- `flatMap()` —— 将流中的流合并为一个流
+
+
+
+## 结束操作
+
+### 匹配
+
+- allMatch —— 检查是否匹配所有元素
+- anyMatch —— 检查是否至少匹配一个元素
+- noneMatch —— 检查是否没有匹配的元素
+- findFirst —— 返回第一个元素
+- indAny —— 返回当前流中的任意元素
+- count —— 返回流中元素的总个数	
+- max —— 返回流中最大值
+- min —— 返回流中最小值
+
+### 归约
+
+```java
+//Integer集合求和，
+List<Integer> list = Arrays.asList(1,2,3,4,5,6,7,8,9,10);
+Integer sum = list.stream()
+	.reduce(0, (x, y) -> x + y);
+
+//求员工的工资和
+Optional<Double> op = emps.stream()
+    .map(Employee::getSalary)
+    .reduce(Double::sum);
+System.out.println(op.get());
+```
+
+- reduce(T identity, BinaryOperator) / reduce(BinaryOperator)——可以将流中元素反复结合起来，得到一个值。
+
+### 收集
+
+```java
+//将所有的名字收集到List中去
+List<String> list = emps.stream()
+	.map(Employee::getName)
+	.collect(Collectors.toList());
+	
+//将名字放入特殊集合中
+HashSet<String> hs = emps.stream()
+	.map(Employee::getName)
+	.collect(Collectors.toCollection(HashSet::new));
+```
+
+- collect——将流转换为其他形式。接收一个Collector接口的实现，用于给Stream中元素做汇总的方法
+
+#### 对流求值
+
+```java
+//最大值
+Optional<Double> max = emps.stream()
+	.map(Employee::getSalary)
+	.collect(Collectors.maxBy(Double::compare));
+
+//最小值
+Optional<Employee> op = emps.stream()
+	.collect(Collectors.minBy((e1, e2) -> Double.compare(e1.getSalary(), e2.getSalary())));
+
+//总和
+Double sum = emps.stream()
+	.collect(Collectors.summingDouble(Employee::getSalary));
+
+//平均值
+Double avg = emps.stream()
+	.collect(Collectors.averagingDouble(Employee::getSalary));
+
+//总数
+Long count = emps.stream()
+	.collect(Collectors.counting());
+
+```
+
+#### 关于收集Map
+
+```java
+//普通的toMap，出现重复key会报错
+Map<Long, String> map = userList.stream()
+            .collect(Collectors.toMap(User::getId, User::getUsername);
+                     
+//重复key的value覆盖
+Map<Long, String> map = userList.stream()
+        .collect(Collectors.toMap(User::getId, User::getUsername, (v1, v2) -> v1));
+                     
+//重复key的value收集为List
+userList.stream().collect(Collectors.toMap(
+    User::getId,
+    e -> Arrays.asList(e.getUsername()),
+    (List<String> oldList, List<String> newList) -> {
+                    oldList.addAll(newList);
+                    return oldList;
+    })
+);
+```
