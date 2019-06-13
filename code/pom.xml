@@ -8,9 +8,15 @@
     <artifactId>notes</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
     <modules>
         <module>design_pattern</module>
         <module>sorting_algorithm</module>
+        <module>test_questions</module>
     </modules>
 
 
