@@ -152,9 +152,9 @@ public class NumberCollections {
         return null;
     }
 
-    public String guibin(int index1, int index2){
-        
-    }
+//    public String guibin(int index1, int index2){
+//
+//    }
 
     public static void main(String[] args) {
         System.out.println(findMedianSortedArrays(new int[]{1,2}, new int[]{3, 4}));
