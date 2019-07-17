@@ -21,7 +21,7 @@ public class List2TreeInterfaceUtils<T extends NodeInterface> {
 
         ArrayList<T> collect = new ArrayList<T>();
         for (T t : nodeList) {
-            if(t.getId().equals(t.getParentId())){
+            if(current.getId().equals(t.getParentId())){
                 collect.add(t);
             }
         }
@@ -36,19 +36,9 @@ public class List2TreeInterfaceUtils<T extends NodeInterface> {
                 node.getChilds().add(child);
             }
         } else {
-            node.setIsLeaf(false);
+            node.setIsLeaf(true);
             return node;
         }
         return node;
     }
-
-    public String upperCase(String str) {
-        if ((str == null) || (str.length() == 0)) return str;
-        char[] ch = str.toCharArray();
-        if (ch[0] >= 'a' && ch[0] <= 'z') {
-            ch[0] = (char) (ch[0] - 32);
-        }
-        return new String(ch);
-    }
-
 }

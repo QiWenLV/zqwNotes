@@ -12,6 +12,10 @@
     <name>test_questions</name>
     <description>这个项目会汇总一些算法小题和面试编程题</description>
 
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
 
     <dependencies>
         <dependency>
