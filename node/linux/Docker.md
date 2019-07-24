@@ -448,3 +448,30 @@ VOLUME ["/my_files"]
 WORKDIR ~/
 ```
 
+
+
+## 创建问题
+
+### 查看日志
+
+```sh
+journalctl -u docker.service
+```
+
+### 部署错误
+
+```sh
+SELinux is not supported with the overlay2 graph driver on this kernel. Either boot into a newer kernel or disable selinux in docker (--selinux-enabled=false)  
+```
+
+根据加粗亮红色字体的错误日志可以看出，此linux的内核中的SELinux不支持 overlay2 graph driver ，解决办法有两种，要么启动一个新内核，要么就在docker里禁用selinux，--selinux-enabled=false
+
+```sh
+vim /etc/sysconfig/docker
+ 
+OPTIONS='--selinux-enabled=false  --log-driver=journald --signature-verification=false'
+if [ -z "${DOCKER_CERT_PATH}" ]; then
+    DOCKER_CERT_PATH=/etc/docker
+fi
+```
+

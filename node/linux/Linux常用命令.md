@@ -90,3 +90,10 @@ yum install docker		#安装
 yum remove docker		#卸载
 ```
 
+### ssh
+
+```sh
+ssh-keygen
+ssh-copy-id root@192.168.0.1
+```
+
