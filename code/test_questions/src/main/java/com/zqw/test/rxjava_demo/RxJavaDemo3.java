@@ -36,7 +36,7 @@ public class RxJavaDemo3 {
                 .buffer(2, 1)
                 .subscribe(x -> {
                     StringJoiner sj = new StringJoiner(",", " 元素：[", "]\n");
-                    x.stream().map(String::valueOf)s.forEach(sj::add);
+                    x.stream().map(String::valueOf).forEach(sj::add);
                     System.out.print("缓冲区大小：" + x.size() + sj.toString());
                 });
 
