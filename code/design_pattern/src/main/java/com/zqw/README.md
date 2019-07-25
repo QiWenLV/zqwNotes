@@ -1,3 +1,8 @@
+### adapter  适配器模式
+- classadapter  类适配器
+- interfaceadaper  接口适配器（缺省适配）
+- objectadapter  对象适配器
+
 ### builder  建造者模式
 
 - improve  建造者模式代码演示
