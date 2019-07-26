@@ -18,6 +18,7 @@
         <module>sorting_algorithm</module>
         <module>test_questions</module>
         <module>base</module>
+        <module>springboot_demo</module>
     </modules>
 
 
