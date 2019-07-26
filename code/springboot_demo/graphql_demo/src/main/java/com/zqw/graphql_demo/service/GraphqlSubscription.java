@@ -9,14 +9,17 @@ import io.leangen.graphql.annotations.GraphQLSubscription;
 import io.leangen.graphql.spqr.spring.annotation.GraphQLApi;
 import io.leangen.graphql.spqr.spring.util.ConcurrentMultiRegistry;
 import org.reactivestreams.Publisher;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @Classname GraphqlSubscription
@@ -54,11 +57,18 @@ public class GraphqlSubscription {
 
     //长连接
     @GraphQLSubscription(name = "queryLongPersion", description = "查询列表")
-    public Publisher<Person> queryLongPersion(@GraphQLArgument(name = "person") Person person){
+    public Flux<ServerSentEvent<Integer>> queryLongPersion(@GraphQLArgument(name = "person") Person person){
         System.out.println("访问长连接");
-        return Flux.create(subscriber ->
-                subscribers.add(person.getName(), subscriber.onDispose(() -> subscribers.remove(person.getName(), subscriber))),
-                FluxSink.OverflowStrategy.LATEST);
+//        return Flux.create(subscriber ->
+//                subscribers.add(person.getName(), subscriber.onDispose(() -> subscribers.remove(person.getName(), subscriber))),
+//                FluxSink.OverflowStrategy.LATEST);
+
+        return Flux.interval(Duration.ofSeconds(1))
+                .map(seq -> ServerSentEvent.<Integer>builder()
+                        .event("random")
+                        .id(seq.toString())
+                        .data(ThreadLocalRandom.current().nextInt())
+                        .build());
     }
 }
 
