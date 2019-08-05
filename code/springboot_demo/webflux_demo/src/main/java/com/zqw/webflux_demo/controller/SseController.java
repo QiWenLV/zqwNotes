@@ -22,7 +22,7 @@ public class SseController {
 
     @GetMapping("/random")
     public Flux<ServerSentEvent<Integer>> random(){
-        return Flux.interval(Duration.ofSeconds(1))
+        return Flux.interval(Duration.ofMillis(100))
                 .map(seq -> ServerSentEvent.<Integer>builder()
                         .event("random")
                         .id(seq.toString())
